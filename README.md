@@ -12,7 +12,7 @@ Installation Steps
 
 1. Clone the Repository
 
-git clone https://github.com/yourusername/your-repository-name.git  
+git clone https://github.com/POOMANI63/ONLINE-MUSEUM-TICKET-BOOKING-SYSTEM.git; 
 cd your-repository-name
 
 3. Create a Virtual Environment
