@@ -1,0 +1,65 @@
+{% extends 'chatbot/base.html' %}
+
+{% block title %}Enter Your Details{% endblock %}
+
+{% block content %}
+    <h2 class="text-center text-2xl font-semibold mb-6">Enter Your Details</h2>
+    
+    <form method="POST" class="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md">
+        {% csrf_token %}
+        
+        <div class="mb-4">
+            <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.name.label }}</label>
+            <input type="text" name="{{ form.name.name }}" id="{{ form.name.id_for_label }}" class="w-full p-3 border border-gray-300 rounded-md shadow-sm" />
+            {% if form.name.errors %}
+                <div class="text-red-600 text-sm mt-1">
+                    {% for error in form.name.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.age.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.age.label }}</label>
+            <input type="number" name="{{ form.age.name }}" id="{{ form.age.id_for_label }}" value="{{ form.age.value }}" class="w-full p-3 border border-gray-300 rounded-md shadow-sm" />
+            {% if form.age.errors %}
+                <div class="text-red-600 text-sm mt-1">
+                    {% for error in form.age.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.gender.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.gender.label }}</label>
+            <select name="{{ form.gender.name }}" id="{{ form.gender.id_for_label }}" class="w-full p-3 border border-gray-300 rounded-md shadow-sm">
+                <option value="Male" {% if form.gender.value == 'Male' %}selected{% endif %}>Male</option>
+                <option value="Female" {% if form.gender.value == 'Female' %}selected{% endif %}>Female</option>
+                <option value="Other" {% if form.gender.value == 'Other' %}selected{% endif %}>Other</option>
+            </select>
+            {% if form.gender.errors %}
+                <div class="text-red-600 text-sm mt-1">
+                    {% for error in form.gender.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.email.label }}</label>
+            <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}"  class="w-full p-3 border border-gray-300 rounded-md shadow-sm" />
+            {% if form.email.errors %}
+                <div class="text-red-600 text-sm mt-1">
+                    {% for error in form.email.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">Submit</button>
+    </form>
+{% endblock %}

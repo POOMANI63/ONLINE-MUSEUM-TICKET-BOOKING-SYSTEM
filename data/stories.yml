@@ -1,0 +1,67 @@
+version: "3.1"
+
+stories:
+  - story: greet and ask about museum
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_about_museum
+      - action: utter_about_museum
+
+  - story: ask for location
+    steps:
+      - intent: ask_location
+      - action: utter_location
+
+  - story: ask for opening hours
+    steps:
+      - intent: ask_opening_hours
+      - action: utter_opening_hours
+
+  - story: ask about ticket price
+    steps:
+      - intent: ask_ticket_price
+      - action: utter_ticket_price
+
+  - story: book ticket
+    steps:
+      - intent: book_ticket
+        entities:
+          - number: "2"
+          - time: "3 PM"
+          - ticket_type: "adult"
+      - action: action_book_ticket
+      - slot_was_set:
+          - number_of_tickets: "2"
+          - time: "3 PM"
+          - ticket_type: "adult"
+
+  - story: fallback scenario
+    steps:
+      - intent: fallback
+      - action: action_custom_fallback
+
+
+  - story: invalid time input
+    steps:
+      - intent: book_ticket
+        entities:
+          - number: "2"
+          - time: "8:00 AM"
+      - action: action_book_ticket
+      - action: utter_invalid_time
+
+  - story: booking querys 
+    steps:
+      - intent: book_ticket
+      - action: utter_book_ticket
+
+  - story: cars collection 
+    steps:
+      - intent: ask_about_collection
+      - action: utter_about_collection
+
+  - story: cancelation 
+    steps:
+      - intent: ask_about_collection
+      - action: utter_cancellation

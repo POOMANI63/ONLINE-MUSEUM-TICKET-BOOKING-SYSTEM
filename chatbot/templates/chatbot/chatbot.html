@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Museum Bot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #62d6f4, #5a7df2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 500px;
+            height: 80%;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        .header {
+            background-color: #0078d4;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-bottom: 60px;
+        }
+        .message {
+            max-width: 80%;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .user-message {
+            align-self: flex-end;
+            background-color: #d1f1d1;
+            border-top-left-radius: 0;
+        }
+        .bot-message {
+            align-self: flex-start;
+            background-color: #e0e0e0;
+            border-top-right-radius: 0;
+        }
+        .typing-indicator {
+            align-self: flex-start;
+            font-style: italic;
+            color: #888;
+            font-size: 14px;
+        }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0078d4;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .input-container {
+            padding: 15px;
+            background-color: #f1f1f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #ccc;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #0078d4;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #005fa3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="header">Chat with Museum Bot</div>
+        <div class="messages" id="chat-container">
+            <!-- Messages will be dynamically added here -->
+        </div>
+        <div class="input-container">
+            <input type="text" id="user-message" placeholder="Type a message..." onkeydown="if(event.key === 'Enter'){sendMessage();}">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize an empty array to hold the conversation
+        let conversation = JSON.parse(sessionStorage.getItem('conversationHistory')) || [];
+
+        // Function to load conversation from sessionStorage
+        function loadConversation() {
+            // Ensure conversation is loaded properly
+            if (conversation && Array.isArray(conversation)) {
+                conversation.forEach(msg => {
+                    appendMessage(msg.user, true);
+                    appendMessage(msg.bot, false);
+                });
+            }
+        }
+
+        // Function to append a new message to the chat container
+        function appendMessage(message, isUser, isTyping = false) {
+            let messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            if (isUser) {
+                messageDiv.classList.add('user-message');
+            } else {
+                messageDiv.classList.add('bot-message');
+            }
+
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            message = message.replace(urlRegex, function(url) {
+                return `<a href="${url}">Click here</a>`;
+            });
+            messageDiv.innerHTML = message;
+            document.getElementById('chat-container').appendChild(messageDiv);
+            document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
+
+            if (isTyping) {
+                let typingDiv = document.createElement('div');
+                typingDiv.classList.add('typing-indicator');
+                typingDiv.innerHTML = "<div class='spinner'></div>";
+                document.getElementById('chat-container').appendChild(typingDiv);
+            }
+        }
+
+        // Function to save conversation to sessionStorage
+        function saveConversation(userMessage, botResponse) {
+            conversation.push({ user: userMessage, bot: botResponse });
+            sessionStorage.setItem('conversationHistory', JSON.stringify(conversation));
+        }
+
+        // Function to send a message to the bot
+        function sendMessage() {
+            const userMessage = document.getElementById('user-message').value;
+            if (userMessage.trim() === '') return;
+
+            appendMessage(userMessage, true);  // Show user message
+            document.getElementById('user-message').value = '';
+
+            appendMessage("", false, true);  // Show typing indicator
+
+            fetch('http://localhost:5005/webhooks/rest/webhook', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ "message": userMessage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const botResponse = data[0]?.text || "Sorry, I didn't understand that.";
+                setTimeout(() => {
+                    appendMessage(botResponse, false);
+                    const typingIndicators = document.querySelectorAll('.typing-indicator');
+                    typingIndicators.forEach(indicator => indicator.remove());
+                    saveConversation(userMessage, botResponse);  // Save the conversation to sessionStorage
+                }, 1000);
+            });
+        }
+
+        // Load the conversation history when the page loads
+        loadConversation();
+    </script>
+</body>
+</html>

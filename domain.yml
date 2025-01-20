@@ -1,0 +1,115 @@
+version: "3.1"
+
+intents:
+
+  - greet
+  - ask_about_museum
+  - ask_location
+  - ask_opening_hours
+  - book_ticket
+  - ask_ticket_price
+  - ask_about_facilities
+  - ask_combo_offers
+  - ask_cancellation
+  - ask_about_collection
+  - invalid_time  # Add this intent
+  - fallback
+  - booking_success
+
+entities:
+  - time
+  - number
+  - ticket_type
+
+slots:
+  time:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: time
+  number_of_tickets:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: number
+  ticket_type:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: ticket_type
+    initial_value: "unspecified"
+  booking_status:
+    type: text
+    initial_value: "not_confirmed"
+    mappings: []
+
+responses:
+
+  utter_booking_success:
+    - text: "Your booking was successful! The details have been sent to your email."
+
+  utter_greet:
+    - text: "Hello! Welcome to the GD Car Museum. How can I assist you today?"
+
+  utter_about_museum:
+    - text: |
+        The museum was founded by GD Gopal in 2015 as a commemoration of his late father, Gopalswamy Doraiswamy Naidu. It showcases a unique collection of vintage cars from around the world.
+
+  utter_location:
+    - text: "734, President Hall Building, Avinashi Rd, Race Course, Coimbatore, Tamil Nadu 641018"
+
+  utter_opening_hours:
+    - text: "The GD Car Museum is open from 9:00 AM to 5:00 PM every day, including weekends."
+
+  utter_ticket_price:
+    - text: |
+        Tickets are priced as follows:
+        - Adults: ₹200
+        - Children (below 12): ₹100
+        - Senior Citizens: ₹150
+        Discounts are available for students with a valid ID.
+  
+  utter_invalid_time:
+    - text: "The museum only operates between 10:00 AM and 5:00 PM. Please enter a time within this range."
+
+
+  utter_book_ticket:
+    - text: "Sure! Please provide the time and number of tickets you'd like to book. For example: 'i want to book 2 adults tickets for 3:00 PM.'"
+
+  utter_facilities:
+    - text: |
+        The museum has the following facilities:
+        - Ample parking space
+        - Wheelchair accessibility
+        - A café offering snacks and beverages
+
+  utter_combo_offers:
+    - text: |
+        We offer combo tickets for ₹250 per person, including museum entry and a guided tour. You can also explore our gift shop for souvenirs.
+
+  utter_cancellation:
+    - text: |
+        To cancel your ticket, please visit our website or contact our support team at support@gdcarmuseum.com. If you're late, we will try to accommodate you in the next available slot.
+
+  utter_fallback:
+    - text: |
+        I couldn’t find an answer for that. Could you please rephrase your question or ask something related to the GD Car Museum? I can help with bookings, ticket prices, facilities, and more.
+
+  utter_about_collection:
+    - text: |
+        The Gedee Car Museum in Coimbatore has over 110 cars, including a dedicated 3,500 sq ft section showcasing nearly 40 Indian cars. Some of the iconic cars on display are:
+        - Benz Motorwagen (the world's first car)
+        - Ford T
+        - Rolls Royce Twenty
+        - BMW Isetta 250
+        - Chevrolet AE Independence
+
+        It also features a section on Indian cars, science exhibits, and interactive STEM labs.
+
+actions:
+  - action_book_ticket
+  - action_custom_fallback 
+
+
+
+

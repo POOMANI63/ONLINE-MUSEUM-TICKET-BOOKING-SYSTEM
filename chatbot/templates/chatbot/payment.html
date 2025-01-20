@@ -1,0 +1,66 @@
+{% extends 'chatbot/base.html' %}
+
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+    <div class="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-lg">
+        <h2 class="text-center text-2xl font-semibold mb-6">Complete Your Payment</h2>
+
+        <div class="mb-6 text-center">
+            <h3 class="text-lg font-medium text-gray-700">Booking: {{ ticket_count }} {{ ticket_type }} ticket(s) for ₹{{ total_price }}</h3>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700">Select Payment Method</label>
+
+                <!-- Payment Method Selection -->
+                <div class="space-y-4 mt-2">
+                    <div class="flex items-center">
+                        <input type="radio" id="credit_card" name="payment_method" value="Credit Card" class="form-radio text-blue-600" checked>
+                        <label for="credit_card" class="ml-3 text-gray-700">Credit Card</label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input type="radio" id="upi" name="payment_method" value="UPI" class="form-radio text-blue-600">
+                        <label for="upi" class="ml-3 text-gray-700">UPI</label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input type="radio" id="paypal" name="payment_method" value="PayPal" class="form-radio text-blue-600">
+                        <label for="paypal" class="ml-3 text-gray-700">PayPal</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Details for Payment Methods -->
+            <div id="upi_details" class="hidden mb-6">
+                <label class="block text-sm font-medium text-gray-700">Enter Your UPI ID</label>
+                <input type="text" name="upi_id" class="w-full p-2 border border-gray-300 rounded-md mt-2" placeholder="Enter UPI ID" />
+            </div>
+
+            <div class="mb-6">
+                <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                    Pay Now
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Show/Hide UPI details based on selected payment method
+        const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+        const upiDetails = document.getElementById('upi_details');
+
+        paymentMethods.forEach((method) => {
+            method.addEventListener('change', () => {
+                if (document.getElementById('upi').checked) {
+                    upiDetails.classList.remove('hidden');
+                } else {
+                    upiDetails.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+{% endblock %}

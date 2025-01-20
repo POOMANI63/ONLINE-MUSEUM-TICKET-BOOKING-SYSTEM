@@ -1,0 +1,38 @@
+version: "3.1"
+
+rules:
+  - rule: greet user
+    steps:
+      - intent: greet
+      - action: utter_greet
+
+  - rule: provide museum information
+    steps:
+      - intent: ask_about_museum
+      - action: utter_about_museum
+
+  - rule: provide location information
+    steps:
+      - intent: ask_location
+      - action: utter_location
+
+  - rule: provide opening hours
+    steps:
+      - intent: ask_opening_hours
+      - action: utter_opening_hours
+
+  - rule: provide ticket price
+    steps:
+      - intent: ask_ticket_price
+      - action: utter_ticket_price
+
+
+  - rule: handle fallback
+    steps:
+      - intent: fallback
+      - action: action_custom_fallback
+
+  - rule: Handle booking success
+    steps:
+      - intent: booking_success
+      - action: utter_booking_success

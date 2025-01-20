@@ -1,0 +1,11 @@
+{% extends 'chatbot/base.html' %}
+
+{% block title %}Booking Successful{% endblock %}
+
+{% block content %}
+    <div class="max-w-md mx-auto mt-12 p-6 bg-white rounded-lg shadow-lg text-center">
+        <h1 class="text-3xl font-semibold mb-4">Booking Successful!</h1>
+        <p class="text-lg mb-6">Your booking has been completed. Thank you for your reservation.</p>
+        <a href="{% url 'chatbot:chatbot_home' %}" class="inline-block px-6 py-2 bg-green-600 text-white rounded-full">Back to Chat</a>
+    </div>
+{% endblock %}

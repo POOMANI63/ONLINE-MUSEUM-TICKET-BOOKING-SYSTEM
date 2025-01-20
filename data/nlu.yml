@@ -1,0 +1,89 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - hello
+      - hi
+      - hey
+      - good morning
+      - good afternoon
+      - howdy
+      - hai
+
+  - intent: ask_about_museum
+    examples: |
+      - Tell me about the museum
+      - What is the GD Car Museum?
+      - What can I see in the museum?
+      - about the museum
+
+
+  - intent: ask_location
+    examples: |
+      - Where is the museum?
+      - What is the location of the museum?
+      - Can you tell me the address?
+      - location 
+
+  - intent: ask_opening_hours
+    examples: |
+      - What are the opening hours?
+      - When is the museum open?
+      - What are the timings on weekends?
+      
+
+  - intent: book_ticket
+    examples: |
+      - I want to book [2](number) tickets for [3 PM](time)
+      - Book [3](number) tickets at [5:30 PM](time)
+      - Can I book [1](number) ticket for [11 AM](time)?
+      - I want to book [2](number) [adult](ticket_type) tickets for [3:00 PM](time)
+      - I want to book [1](number) [children](ticket_type) ticket for [4:00 PM](time)
+      - book the ticket
+      - book 
+      - i want to book the ticket
+      - 2 tickets
+
+  - intent: ask_ticket_price
+    examples: |
+      - How much does a ticket cost?
+      - What is the ticket price?
+      - Is there a student discount?
+      - ticket price 
+      - about ticket details
+      - ticket
+
+  - intent: ask_about_facilities
+    examples: |
+      - Do you have parking?
+      - Is there a café in the museum?
+      - Is the museum wheelchair accessible?
+
+  - intent: fallback
+    examples: |
+      - ???
+      - gibberish
+
+  - intent: invalid_time
+    examples: |
+      - I want to book tickets for 8 AM
+      - Can I get tickets for 7 PM?
+      - I want to book a ticket at 9:30 AM
+      - Book tickets at 6 PM
+
+
+  - intent: ask_about_collection
+    examples: |
+      - What cars are there in the Gedee Car Museum?
+      - Tell me about the museum's car collection
+      - How many cars are there in the museum?
+      - cars 
+      - about cars 
+
+  - intent: booking_success
+    examples: |
+      - Your booking was successful!
+      - The tickets have been booked successfully.
+      - Thank you for booking with us!
+      - My booking is confirmed!
